@@ -1,0 +1,189 @@
+{{define "layout"}}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600" rel="stylesheet"> 
+	<title>Tagifai | What's in your photo?</title>
+
+	<style>
+		* {
+			padding: 0;
+			margin: 0;
+			box-sizing: border-box;
+			font-family: 'Open Sans', sans-serif;
+		}
+		h1 {
+			margin: 1rem 0 0.5rem 0;
+			text-align: center;
+		}
+		.punchline {
+			text-align: center;
+			margin-bottom: 1rem;
+		}
+		#main-container {
+			display: flex;
+			flex-flow: column nowrap;
+			padding: 1rem;
+		}
+		#tag-container {
+			background-color: rgba(0,0,0,0.08);
+			padding: 1rem;
+			margin-bottom: 1rem;
+			text-align: center;
+			flex: 1 1 0;
+		}
+		#tag-container > ul {
+			list-style: none;
+			display: flex;
+			flex-flow: row wrap;
+			justify-content: center;	
+		}
+		#tag-container > ul li {
+			background-color: black;
+			color: white;
+			padding: 8px;
+			text-transform: capitalize;
+			margin: 4px;
+		}
+		#tag-container > ul li span:nth-child(2) {
+			color: green;
+			margin-left: 8px;
+		}
+		#upload_form {
+			display: flex;
+			flex-flow: column nowrap;
+			align-items: center;
+		}
+		#preview_img {
+			width: 200px;
+			height: 200px;
+			background-color: rgba(0,0,0,0.08);
+			object-fit: cover;
+		}
+		form input[type=file] {
+			display: none;
+		}
+		label[for="file-upload"] {
+			background-color: rgba(0,0,0,0.5);
+			color: white;
+			max-width: 200px;
+			width: 100%;
+			text-align: center;
+			padding: 8px;
+			cursor: pointer;
+			display: inline-block;
+			height: 40px;
+		}
+		a[href*=github] {
+			position: absolute;
+			right: 1rem;
+			bottom: 1rem;
+		}
+		/* tablets or larger */
+		@media only screen and (min-width: 600px) {
+			#main-container {
+				flex-flow: row nowrap;
+			}
+			#tag-container {
+				order: 1;
+				margin-left: 1rem;
+				margin-bottom: 0;
+			}
+		}
+	</style>
+</head>
+
+<body>
+	<h1>Tagifai</h1>
+	<p class="punchline">Auto-tag Your Photos.</p>
+
+	<div id="main-container">
+		<div id="tag-container">
+			<p>No Tags Yet</p>
+		</div>
+		<form action="" id="upload_form">
+			<img src="" alt="" id="preview_img">
+			<label for="file-upload">
+					Upload Image
+			</label>
+			<input id="file-upload" type="file" accept="image/*"/>
+		</form>
+	</div>
+	
+	<a href="https://github.com/eyeezzi/tagifai" target="_blank">Github Repo</a>
+	
+	<script>
+		function handleSelection(event) {
+			var files = event.target.files
+
+			const f = files[0]
+
+			let reader = new FileReader()
+			reader.onload = function(e) {
+				document.getElementById("preview_img").src = e.target.result
+				submitForm()
+			}
+
+			reader.readAsDataURL(f)
+		}
+		const tagBlock = ({Name, Value}) => {
+			return `
+				<li>
+					<span>${Name}</span>
+					<span>${Math.round(Value * 1000) / 10}%</span>
+				</li>
+			`
+		}
+		const tagList = (tags) => {
+			return `
+				<ul>
+					${ tags.map(tagBlock).join('') }
+				</ul>
+			`
+		}
+		function submitForm() {
+
+			let imgSrc = document.getElementById("preview_img").getAttribute('src')
+			if (imgSrc == undefined || imgSrc == "") {
+				alert("Nothing to tag.")
+				return
+			}
+
+			const data = {
+				Name: 'test',
+				DataURL: imgSrc,
+			}
+
+			return fetch("/tags", {
+				method: 'POST',
+				body: JSON.stringify(data),
+				headers: new Headers({
+					'Content-Type': 'application/json'
+				})
+			})
+			.then(res => res.json())
+			.then(tags => {
+				if (!Array.isArray(tags)) {
+					alert('Unknown response format received.')
+					return
+				}
+
+				const tagsContainer = document.getElementById("tag-container")
+				tagsContainer.innerHTML = tagList(tags)
+			})
+			.catch(err => {
+				console.error(err)
+			})
+		}
+
+		// attach listeners.
+		document.getElementById("file-upload").addEventListener('change', handleSelection, false)
+
+	</script>
+</body>
+
+</html>
+{{end}}
