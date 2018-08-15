@@ -64,3 +64,8 @@ This app requires the following envars. In Heroku, you manually enter them as *C
 	dep ensure -update
 	dep ensure -update <dep>
 
+## Project Documentation
+
+### Architecture
+
+![](docs/tagifai_system_architecture.svg)
