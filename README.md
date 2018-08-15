@@ -1,16 +1,14 @@
 # Tagifai
 
-Automatically generates tags by analysing your uploaded photo using [Clarifia](https://clarifai.com/) image analysis AI. Just a simple experiment on working with 3rd-party REST APIs in Go.
+Automatically generates tags by analysing your uploaded photo using the [Clarifia](https://clarifai.com/) image classification models. Just a simple experiment on working with 3rd-party REST APIs in Go.
 
-[Demo](https://tagifai.herokuapp.com/)
-
-## Dependencies
+## Requirements
 
 * go1.10.3
 * dep v0.5.0
 * A free Clarifai account with an API_KEY
 
-## Local Installation
+## Local Setup
 
 	cd $GOPATH/src
 	git clone <repo>
@@ -33,7 +31,7 @@ This app is configured to run on Heroku.
 
 This app requires the following envars. In Heroku, you manually enter them as *Config Vars* in the app's dashboard, but on your local machine, you save them in a `.env` file at the project root directory. 
 
-> Treat these as secrets - **you must never be commit them source control.**
+> Treat these as secrets - **you must never commit them source control.**
 
 	DEPLOYMENT = local|staging|production
 	CLARIFAI_API_KEY = xxxxxxxxxxxxxxxxx
@@ -43,7 +41,7 @@ This app requires the following envars. In Heroku, you manually enter them as *C
 
 ### Tools Used
 
-* `dep`: _Go_ dependency managment tool. Just like _npm_ for Node, dependencies are specified in a `Gopkg.toml`, a versioned snapshot is saved in `Gopkg.lock`, and a `/vendor` directory holds the actual source code.
+* `dep`: _Go_ dependency managment tool. Just like _npm_ for Node.js, dependencies are specified in a `Gopkg.toml`, a versioned snapshot is saved in `Gopkg.lock`, and a `/vendor` directory holds the actual source code.
 
 #### Go on Heroku
 
