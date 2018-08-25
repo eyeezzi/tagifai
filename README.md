@@ -27,15 +27,7 @@ This app is configured to run on Heroku.
 	* Write your Go code as usual.
 	* When ready, commit your changes and push to Heroku: `$ git push heroku <localbranch>:master`
 
-### Environment Variables
-
-This app requires the following envars. In Heroku, you manually enter them as *Config Vars* in the app's dashboard, but on your local machine, you save them in a `.env` file at the project root directory. 
-
-> Treat these as secrets - **you must never commit them source control.**
-
-	DEPLOYMENT = local|staging|production
-	CLARIFAI_API_KEY = xxxxxxxxxxxxxxxxx
-	IMG_ANALYSIS_ENDPOINT = https://url/to/clarifai/model
+> For local testing, rename *example.env* -> *.env* and supply the required environment variables. In Heroku, you'll need to set these key-value pairs in the *Config Vars* section of the app's dashboard. **These variables should be treated as secrets hence why I have not commited them to source control.**
 
 ## Developer Notes
 
